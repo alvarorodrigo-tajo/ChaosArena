@@ -358,12 +358,12 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
         player1.draw(canvas);
         player2.draw(canvas);
 
-//        if (hitFlashTimer > 0) {
-//            float alpha = hitFlashTimer / HIT_FLASH_DURATION;
-//            paintHitFlash.setColor(0xFFFFFF00);
-//            paintHitFlash.setAlpha((int)(220 * alpha));
-//            canvas.drawCircle(hitFlashX, hitFlashY, 120f * (1.5f - alpha), paintHitFlash);
-//        }
+        if (hitFlashTimer > 0) {
+            float alpha = hitFlashTimer / HIT_FLASH_DURATION;
+            paintHitFlash.setColor(0xFFFFFF00);
+            paintHitFlash.setAlpha((int)(220 * alpha));
+            canvas.drawCircle(hitFlashX, hitFlashY, 120f * (1.5f - alpha), paintHitFlash);
+        }
 
         // Efecto visual rojo si alguien lanza especial
         if ((player1.isAttacking() && player1.getCurrentAttackType() == Player.AttackType.SPECIAL) ||

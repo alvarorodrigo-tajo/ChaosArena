@@ -33,9 +33,11 @@ public class Player {
     public  float groundY;
 
     // ── Escalado visual ───────────────────────────────────────────────────────
-    public float scale       = 1.0f;
-    public float drawOffsetX = 0f;
-    public float drawOffsetY = 0f;
+    public float scale        = 1.0f;
+    public float drawOffsetX  = 0f;
+    public float drawOffsetY  = 0f;
+    private float visualScale   = 1.0f;
+    private float visualOffsetY = 0f;
     private float worldHeight;
     private float hbWMult    = 0.35f;
     private float hbHMult    = 0.80f;
@@ -63,7 +65,7 @@ public class Player {
     private final Matrix matrix   = new Matrix();
 
     // ── Debug hitboxes ────────────────────────────────────────────────────────
-    public static boolean DEBUG_HITBOXES = false;
+    public static boolean DEBUG_HITBOXES = true;
     private static final Paint dbgBodyPaint;
     private static final Paint dbgAttackPaint;
     static {
@@ -126,11 +128,16 @@ public class Player {
             hbHMult   = 0.490f;
             hbOffsetX = -58f;
             hbOffsetY = 164f;
+            visualScale = scale; visualOffsetY = drawOffsetY;
         } else if (prefix.contains("goro")) {
             scale = 4.0f; drawOffsetX = 0f; drawOffsetY = -472f;
             hasHurtAnim = false;
+            visualScale = scale; visualOffsetY = drawOffsetY;
         } else {
+            // Liu Kang: sprite visualmente más grande sin tocar la hitbox
             scale = 4.0f; drawOffsetX = 0f; drawOffsetY = -396f;
+            visualScale = 4.6f;
+            visualOffsetY = drawOffsetY - (visualScale - scale) * idleAnim.getFrameHeight();
         }
     }
 
@@ -270,8 +277,8 @@ public class Player {
     public boolean canHit(Player other) {
         if (other == null || currentState != State.ATTACKING) return false;
         RectF body  = getHitbox();
-        float reach = (currentAttackType == AttackType.KICK)    ? 400
-                : (currentAttackType == AttackType.SPECIAL)  ? 350 : 300;
+        float reach = (currentAttackType == AttackType.KICK)    ? 295
+                : (currentAttackType == AttackType.SPECIAL)  ? 300 : 220;
         float ax    = facingRight ? body.right : body.left - reach;
         RectF area  = new RectF(ax, body.top, ax + reach, body.bottom);
         return RectF.intersects(area, other.getHitbox());
@@ -281,16 +288,16 @@ public class Player {
         Bitmap frame = currentFrame();
         if (frame == null || frame.isRecycled()) return;
 
-        float pivotHalfW = idleAnim.getFrameWidth() * scale / 2f;
+        float pivotHalfW = idleAnim.getFrameWidth() * visualScale / 2f;
         float drawX = x - pivotHalfW + drawOffsetX;
-        float drawY = (worldHeight - y) + drawOffsetY;
+        float drawY = (worldHeight - y) + visualOffsetY;
 
         matrix.reset();
         if (!facingRight) {
             matrix.setScale(-1, 1);
             matrix.postTranslate(frame.getWidth(), 0);
         }
-        matrix.postScale(scale, scale);
+        matrix.postScale(visualScale, visualScale);
         matrix.postTranslate(drawX, drawY);
 
         boolean blinking = currentState == State.HURT && (int)(hurtTime * 15) % 2 == 0;
@@ -303,8 +310,8 @@ public class Player {
         canvas.drawRect(hb.left, hb.top, hb.right, hb.bottom, dbgBodyPaint);
 
         if (currentState == State.ATTACKING) {
-            float reach = (currentAttackType == AttackType.KICK)    ? 400
-                    : (currentAttackType == AttackType.SPECIAL)  ? 350 : 300;
+            float reach = (currentAttackType == AttackType.KICK)    ? 295
+                    : (currentAttackType == AttackType.SPECIAL)  ? 300 : 220;
             float ax = facingRight ? hb.right : hb.left - reach;
             canvas.drawRect(ax, hb.top, ax + reach, hb.bottom, dbgAttackPaint);
         }
