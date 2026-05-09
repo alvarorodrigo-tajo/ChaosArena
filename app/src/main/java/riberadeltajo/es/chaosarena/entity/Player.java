@@ -65,7 +65,7 @@ public class Player {
     private final Matrix matrix   = new Matrix();
 
     // ── Debug hitboxes ────────────────────────────────────────────────────────
-    public static boolean DEBUG_HITBOXES = true;
+    public static boolean DEBUG_HITBOXES = false;
     private static final Paint dbgBodyPaint;
     private static final Paint dbgAttackPaint;
     static {
