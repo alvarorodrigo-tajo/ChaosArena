@@ -1,15 +1,14 @@
 package riberadeltajo.es.chaosarena;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Window;
 import android.view.WindowManager;
-import androidx.appcompat.app.AppCompatActivity;
 
 import riberadeltajo.es.chaosarena.engine.Juego;
 import riberadeltajo.es.chaosarena.engine.ResourceManager;
 
-public class ActividadJuego extends AppCompatActivity {
+public class ActividadJuego extends Activity {
 
     // ── Constantes de juego ──────────────────────────────
     public static final int MAX_LEVELS = 3;
@@ -43,11 +42,6 @@ public class ActividadJuego extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Pantalla completa, sin barra de título
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         prefs     = getSharedPreferences("ChaosArenaPrefs", MODE_PRIVATE);

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(head *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\alvar\\\\AndroidStudioProjects\\\\ChaosArena\\\\app\\\\src\\\\main\\\\java\\\\riberadeltajo\\\\es\\\\chaosarena\" -Recurse -Filter \"*.java\")",
+      "Bash(Select-Object -ExpandProperty FullName)"
+    ]
+  }
+}
